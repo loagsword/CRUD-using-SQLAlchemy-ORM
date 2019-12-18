@@ -41,7 +41,7 @@ class Item(Base):
     name = Column(String(200), nullable=False)
     cost_price = Column(Numeric(10, 2), nullable=False)
     selling_price = Column(Numeric(10, 2), nullable=False)
-    # orders = relationship("Order", backref='customer')
+    orders = relationship("OrderLine", backref='order')
 
 
 class Order(Base):
@@ -49,7 +49,7 @@ class Order(Base):
     id = Column(Integer(), primary_key=True)
     customer_id = Column(Integer(), ForeignKey('customers.id'))
     date_placed = Column(DateTime(), default=datetime.now)
-    line_items = relationship("OrderLine", secondary="order_lines", backref='orders')
+    line_items = relationship("OrderLine", backref='item')
 
 
 class OrderLine(Base):
@@ -58,7 +58,7 @@ class OrderLine(Base):
     order_id = Column(Integer(), ForeignKey('orders.id'))
     item_id = Column(Integer(), ForeignKey('items.id'))
     quantity = Column(SmallInteger())
-    item = relationship("Item")
+    # item = relationship('Item')
 
 # class Address(Base):
 #     __tablename__ = 'address'
