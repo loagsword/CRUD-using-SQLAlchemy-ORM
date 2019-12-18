@@ -1,3 +1,5 @@
+import os
+import sys
 from sqlalchemy import create_engine, MetaData, Table, Integer, String, \
     Column, DateTime, ForeignKey, Numeric, SmallInteger
 
@@ -7,11 +9,15 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
-# Create Engine that stores data in /web/Sqlite-Data/example.db file
-engine = create_engine('sqlite:////web/Sqlite-Data/example.db')
 
 # defining the models
 Base = declarative_base()
+
+
+
+# Create Engine that stores data in /web/Sqlite-Data/example.db file
+# engine = create_engine('sqlite:////web/Sqlite-Data/example.db')
+engine = create_engine('sqlite:///Sqlite-Data/example.db')
 
 
 # Creating tables
@@ -22,6 +28,8 @@ class Customer(Base):
     last_name = Column(String(100), nullable=False)
     username = Column(String(50), nullable=False)
     email = Column(String(200), nullable=False)
+    address = Column(String(50))
+    town = Column(String(50))
     created_on = Column(DateTime(), default=datetime.now)
     updated_on = Column(DateTime(), default=datetime.now, onupdate=datetime.now)
     orders = relationship("Order", backref='customer')
@@ -52,6 +60,18 @@ class OrderLine(Base):
     quantity = Column(SmallInteger())
     item = relationship("Item")
 
+# class Address(Base):
+#     __tablename__ = 'address'
+#     id = Column(Integer, primary_key=True)
+#     street_name = Column(String(250))
+#     street_number = Column(String(250))
+#     post_code = Column(String(250), nullable=False)
+#     person_id = Column(Integer, ForeignKey('person.id'))
+#     person = relationship(Person)
+
+
+#  output prints
+print(engine)
 
 # Create all tables in the database
 Base.metadata.create_all(engine)
